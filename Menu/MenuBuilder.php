@@ -67,7 +67,7 @@ class MenuBuilder
         $menu->addChild(
             'Dashboard',
             array(
-                'route' => 'serius_admin_dashboard',
+                'route' => 'serius_admin_dashboard_index',
                 'labelAttributes' => array(
                     'class' => 'fa fa-home'     // icon for dashboard
                 ),
