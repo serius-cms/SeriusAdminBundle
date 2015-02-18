@@ -16,20 +16,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
 
+/**
+ * Creates the menu for the admin area
+ *
+ * @package Serius\Bundle\AdminBundle\Menu
+ */
 class MenuBuilder
 {
     /**
-     * @var \Knp\Menu\FactoryInterface
+     * @var FactoryInterface
      */
     protected $factory;
 
     /**
-     * @var \Sonata\AdminBundle\Admin\Pool
+     * @var Pool
      */
     protected $adminPool;
 
     /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
+     * @var TranslatorInterface
      */
     protected $translator;
 
@@ -66,7 +71,6 @@ class MenuBuilder
                 ),
             )
         );
-
 
 
         /*$menus = $menu->addChild(
@@ -152,11 +156,11 @@ class MenuBuilder
         }
 
         $adminItem = $parentItem->addChild($label, array(
-                'uri' => $admin->generateUrl('list'),
-                'labelAttributes' => array(
-                    'class' => 'fa fa-angle-double-right'
-                ),
-            ));
+            'uri' => $admin->generateUrl('list'),
+            'labelAttributes' => array(
+                'class' => 'fa fa-angle-double-right'
+            ),
+        ));
 
         if (strpos($request->get('_sonata_admin'), $admin->getCode()) === 0) {
             $adminItem->setCurrent(true);
@@ -164,4 +168,4 @@ class MenuBuilder
 
         return $adminItem;
     }
-} 
+}
