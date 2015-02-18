@@ -19,10 +19,10 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css') }}" media="all">
+    <link rel="stylesheet" href="{{ asset('bundles/seriusadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css') }}" media="all">
     {% if admin_pool is defined and admin_pool.getOption('use_select2') %}
-        <link rel="stylesheet" href="{{ asset('vendor/select2/select2.css') }}" media="all">
-        <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap-css/select2-bootstrap.css') }}" media="all">
+        <link rel="stylesheet" href="{{ asset('bundles/seriusadmin/vendor/select2/select2.css') }}" media="all">
+        <link rel="stylesheet" href="{{ asset('bundles/seriusadmin/vendor/select2-bootstrap-css/select2-bootstrap.css') }}" media="all">
         <style>
             /*.select2-container {
                 margin-left: 0px !important;
@@ -58,7 +58,7 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <script src="{{ asset('vendor/jquery-number/jquery.number.min.js') }}"></script>
+    <script src="{{ asset('bundles/seriusadmin/vendor/jquery-number/jquery.number.min.js') }}"></script>
     <script>
         window.SONATA_CONFIG = {
             CONFIRM_EXIT: {% if admin_pool is defined and admin_pool.getOption('confirm_exit') %}true{% else %}false{% endif %},
@@ -120,10 +120,10 @@
     </script>
 
     <script src="{{ asset('bundles/seriusadmin/js/admin.js') }}"></script>
-    <script src="{{ asset('vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script src="{{ asset('bundles/seriusadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js') }}"></script>
     {% if admin_pool is defined and admin_pool.getOption('use_select2') %}
-        <script src="{{ asset('vendor/select2/select2.js') }}"></script>
-        <script src="{{ asset('vendor/select2/select2_locale_nl.js') }}"></script>
+        <script src="{{ asset('bundles/seriusadmin/vendor/select2/select2.js') }}"></script>
+        <script src="{{ asset('bundles/seriusadmin/vendor/select2/select2_locale_nl.js') }}"></script>
     {% endif %}
     <script src="{{ asset('bundles/sonataadmin/jquery/jquery.form.js') }}"></script>
     {% if admin_pool is defined and admin_pool.getOption('confirm_exit') %}
