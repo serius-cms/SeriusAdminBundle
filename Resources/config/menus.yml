@@ -1,0 +1,17 @@
+
+parameters:
+    serius_admin.menu_builder.class: Serius\Bundle\AdminBundle\Menu\MenuBuilder
+
+services:
+    serius_admin.menu_builder:
+        class: %serius_admin.menu_builder.class%
+        arguments: [ @knp_menu.factory, @sonata.admin.pool, @translator ]
+
+    serius_admin.menu.main:
+        class: Knp\Menu\MenuItem
+        factory_service: serius_admin.menu_builder
+        factory_method: createMainMenu
+        arguments: ["@request"]
+        scope: request
+        tags:
+            - { name: knp_menu.menu, alias: serius_admin_main }

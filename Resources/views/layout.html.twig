@@ -1,0 +1,178 @@
+{% extends '@SeriusAdmin/base.html.twig' %}
+
+{% block stylesheets %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% stylesheets
+        'vendor/bootstrap/dist/css/bootstrap.min.css'
+        'bundles/seriusadmin/style/bootstrap-datetimepicker.min.css'
+        'bundles/seriusadmin/style/bootstrap-switch.css'
+        'bundles/seriusadmin/style/daterangepicker-bs3.css'
+        'bundles/seriusadmin/style/dropzone.css'
+        'vendor/font-awesome/css/font-awesome.min.css'
+        'bundles/seriusadmin/style/form.css'
+        'bundles/seriusadmin/style/fullcalendar.css'
+        'bundles/seriusadmin/style/jquery.gritter.css'
+        'bundles/seriusadmin/style/style.less'
+        'bundles/seriusadmin/style/validationEngine.jquery.css'
+        'bundles/seriusadmin/style/widgets.css'
+        filter='cssrewrite'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    <style type="text/css">
+        /*html,
+        body {
+            height:100%;
+        }
+
+        #footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }*/
+        body {
+            background: #333;
+        }
+
+        .content {
+            background: #474F57;
+        }
+
+        .mainbar {
+            min-height: 1200px;
+            background: #FFF;
+        }
+
+        .spacer { margin-top: 15px; }
+
+        .well-empty { margin-bottom: 0; padding: 24px; }
+        .well-empty .btn-group { margin-top: 15px; }
+
+        .sonata-ba-filter > .widget {
+            margin-top: 0;
+        }
+
+        .actions {
+            margin-top: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ asset('vendor/jquery-ui/themes/flick/jquery-ui.min.css') }}"/>
+
+    <link rel="shortcut icon" href="{{ asset('bundles/seriusadmin/img/favicon/favicon.png') }}">
+    <script type="text/javascript" src="{{ asset('bundles/seriusadmin/js/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/jquery-ui/ui/minified/jquery-ui.custom.min.js') }}"></script>
+{% endblock %}
+
+{% block title %}Serius CMS{% endblock %}
+
+{% block body %}
+    <header>
+        <div class="navbar navbar-fixed-top bs-docs-nav" role="banner">
+            <div class="container">
+                <!-- Menu button for smallar screens -->
+                <div class="navbar-header">
+                    <button class="navbar-toggle btn-navbar" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse"><span>Menu</span></button>
+                    <a href="#" class="pull-left menubutton hidden-xs"><i class="fa fa-bars"></i></a>
+                    <!-- Site name for smallar screens -->
+                    <a href="index.html" class="navbar-brand"><span class="bold">Serius</span> CMS</a>
+                </div>
+
+                <!-- Navigation starts -->
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="content">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-dropdown"><a href="#">Navigation</a></div>
+            <!-- Search form -->
+            <form class="navbar-form" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Zoeken">
+                    <button class="btn search-button" type="submit"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
+            {{ knp_menu_render('serius_admin_main', {'template': '@SeriusAdmin/Menu/knp_menu.html.twig', currentClass: 'open active', ancestorClass: 'open active'} ) }}
+        </div>
+        <!-- Sidebar ends -->
+
+        <div class="mainbar">
+            <div class="page-head">
+                <h2 class="pull-left">
+                    {% block page_title %}Dashboard{% endblock %}
+                </h2>
+                <div class="pull-right">
+                    <div class="actions">
+                        {% block actions %}{% endblock %}
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                {% block breadcrumb %}{% endblock %}
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="matter">
+                <div class="container">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Copyright info -->
+                    <p class="copy">Copyright &copy; {{ 'now' | date('Y') }} | <a href="http://www.luijkwebcreations.nl/">Luijk Web Creations</a> </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <span class="totop"><a href="#"><i class="fa fa-chevron-up"></i></a></span>
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+        'bundles/seriusadmin/js/bootstrap.js'
+        'bundles/seriusadmin/js/fullcalendar.min.js'
+        'bundles/seriusadmin/js/morris.min.js'
+        'bundles/seriusadmin/js/excanvas.min.js'
+        'bundles/seriusadmin/js/jquery.flot.js'
+        'bundles/seriusadmin/js/jquery.flot.resize.js'
+        'bundles/seriusadmin/js/jquery.flot.pie.js'
+        'bundles/seriusadmin/js/jquery.flot.stack.js'
+        'vendor/noty/js/noty/jquery.noty.js'
+        'bundles/seriusadmin/js/themes/default.js'
+        'bundles/seriusadmin/js/layouts/bottom.js'
+        'bundles/seriusadmin/js/layouts/topRight.js'
+        'bundles/seriusadmin/js/layouts/top.js'
+        'bundles/seriusadmin/js/moment.min.js'
+        'bundles/seriusadmin/js/daterangepicker.js'
+        'bundles/seriusadmin/js/sparklines.js'
+        'bundles/seriusadmin/js/jquery.gritter.min.js'
+        'bundles/seriusadmin/js/jquery.cleditor.min.js'
+        'bundles/seriusadmin/js/bootstrap-datetimepicker.min.js'
+        'bundles/seriusadmin/js/jquery.slimscroll.min.js'
+        'bundles/seriusadmin/js/bootstrap-switch.min.js'
+        'bundles/seriusadmin/js/jquery.maskedinput.min.js'
+        'bundles/seriusadmin/js/dropzone.js'
+        'bundles/seriusadmin/js/filter.js'
+        'bundles/seriusadmin/js/custom.js'
+        'bundles/seriusadmin/js/charts.js'
+        '@SeriusAdminBundle/Resources/public/js/index.js'
+         %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+{% endblock %}

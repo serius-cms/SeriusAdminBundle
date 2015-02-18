@@ -1,0 +1,16 @@
+{% extends base_template %}
+
+{% block actions %}
+    <div class="sonata-actions btn-group">
+        {% include 'SeriusAdminBundle:Button:create_button.html.twig' %}
+        {% include 'SeriusAdminBundle:Button:list_button.html.twig' %}
+    </div>
+{% endblock %}
+
+{% block side_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active', 'style': 'list'}) }}{% endblock %}
+
+{% block content %}
+
+    Redefine the content block in your action template
+
+{% endblock %}

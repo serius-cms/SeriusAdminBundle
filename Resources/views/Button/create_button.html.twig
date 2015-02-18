@@ -1,0 +1,23 @@
+{% if admin.hasRoute('create') and admin.isGranted('CREATE')%}
+    {% if admin.subClasses is empty %}
+        <a class="btn btn-success" href="{{ admin.generateUrl('create') }}">
+            <i class="fa fa-plus"></i>
+            {{ 'link_action_create'|trans({ '%name%': admin.label }, 'SonataAdminBundle') }}
+        </a>
+    {% else %}
+        <div class="sonata-action-element">
+            <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="icon-plus"></i>
+                {{ 'link_action_create'|trans({}, 'SonataAdminBundle') }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                {% for subclass in admin.subclasses|keys %}
+                    <li>
+                        <a href="{{ admin.generateUrl('create', {'subclass': subclass}) }}">{{ subclass|trans({}, admin.translationdomain) }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endif %}

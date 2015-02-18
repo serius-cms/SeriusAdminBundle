@@ -1,0 +1,46 @@
+{% extends '@SeriusAdmin/admin_layout.html.twig' %}
+
+{% block actions %}
+    <div class="sonata-actions">
+        {% include 'SeriusAdminBundle:Button:edit_button.html.twig' %}
+        {% include 'SonataAdminBundle:Button:history_button.html.twig' %}
+        {% include 'SeriusAdminBundle:Button:list_button.html.twig' %}
+        {% include 'SeriusAdminBundle:Button:create_button.html.twig' %}
+    </div>
+{% endblock %}
+
+{% block side_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active', 'style': 'list'}) }}{% endblock %}
+
+{% block show %}
+    <div class="sonata-ba-view">
+
+        {{ sonata_block_render_event('sonata.admin.show.top', { 'admin': admin, 'object': object }) }}
+
+        {% for name, view_group in admin.showgroups %}
+            <table class="table table-bordered">
+                {% if name %}
+                    <thead>
+                    <tr class="sonata-ba-view-title">
+                        <th colspan="2">
+                            {{ admin.trans(name) }}
+                        </th>
+                    </tr>
+                    </thead>
+                {% endif %}
+
+                <tbody>
+                {% for field_name in view_group.fields %}
+                    <tr class="sonata-ba-view-container">
+                        {% if elements[field_name] is defined %}
+                            {{ elements[field_name]|render_view_element(object) }}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+
+        {{ sonata_block_render_event('sonata.admin.show.bottom', { 'admin': admin, 'object': object }) }}
+
+    </div>
+{% endblock %}

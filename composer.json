@@ -1,0 +1,13 @@
+{
+    "name": "serius-cms/serius-admin-bundle",
+    "description": "A Symfony2 bundle that extends Sonata Admin, providing a CMS backoffice",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dirk Luijk",
+            "email": "dirk@luijkwebcreations.nl"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

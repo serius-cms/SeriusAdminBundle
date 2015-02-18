@@ -1,0 +1,121 @@
+{% extends '@SeriusAdmin/Page/index.html.twig' %}
+
+{% block breadcrumb %}
+    <a href="{{ path('serius_admin_page_index') }}" class=""><i class="fa fa-arrow-left"></i> <span>Terug naar overzicht</span></a>
+{% endblock %}
+
+{% block page_title %}
+    Pagina bewerken: {{ page.name }}
+{% endblock %}
+
+{% block content %}
+    {{ include('@BraincraftedBootstrap/flash.html.twig') }}
+    <div class="row">
+        <div class="col-md-8 col-lg-9">
+            <div class="widget">
+                <div class="widget-head">
+                    Inhoud
+                </div>
+                <div class="widget-content">
+                    <div class="padd">
+                        {% if page.widgets|length == 0 %}
+                            {#<div class="alert alert-info">Deze pagina is nog leeg.</div>#}
+                            <div class="well well-lg well-empty">
+                                <h3>Voeg een widget toe</h3>
+                                <p>Deze pagina is nog leeg. Laten we daar snel iets aan doen.</p>
+
+                                <div class="btn-group">
+                                    <p><a href="#" class="btn btn-success">
+                                            <span class="glyphicon glyphicon-plus"></span> Widget toevoegen
+                                        </a></p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Gebied</th>
+                                    <th>Type</th>
+                                    <th>Laatst aangepast</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for widget in page.widgets %}
+                                    <tr>
+                                        <td>{{ widget.region }}</td>
+                                        <td>{{ widget.type.blockId }}</td>
+                                        <td>..</td>
+                                        <td>
+                                            <a href="{{ path('serius_admin_widget_edit', { 'page_id': widget.page.id, 'id': widget.id }) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Aanpassen</a>
+                                            <a href="#" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <p><a href="{{ path('serius_admin_widget_add', { 'id': page.id }) }}" class="btn btn-success spacer"><span class="glyphicon glyphicon-plus"></span> Nieuwe widget toevoegen</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-3">
+            <div class="widget">
+                <div class="widget-head">
+                    Instellingen
+                </div>
+                <div class="widget-content">
+                    <div class="padd">
+                        <h3>
+                            Status:
+                            {% if page.enabled %}
+                                <span class="text-success">gepubliceerd</span>
+                            {% else %}
+                                <span class="text-danger">uitgeschakeld</span>
+                            {% endif %}
+                        </h3>
+                        <hr/>
+
+                        {% if page.enabled %}
+                            <p><a href="#" class="btn btn-default btn-sm">Pagina uitschakelen</a></p>
+                        {% else %}
+                            <p><a href="#" class="btn btn-primary btn-sm">Pagina publiceren</a></p>
+                        {% endif %}
+                        </p>
+
+                        {#<div class="small spacer">#}
+                            {#<p><i class="fa fa-calendar"></i> Laatst aangepast: </p>#}
+                        {#</div>#}
+
+                        <div class="spacer">
+                            <h4>Menu's</h4>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="">
+                                    Pagina weergeven in hoofdmenu
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="spacer">
+                            <h4>Doorsturen</h4>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="">
+                                    Doorsturen naar andere pagina
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="spacer">
+                            <h4>SEO &amp; overig</h4>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

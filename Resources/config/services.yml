@@ -1,0 +1,21 @@
+
+parameters:
+    serius_admin.controller.index.class:      Serius\Bundle\AdminBundle\Controller\IndexController
+    serius_admin.controller.page.class:       Serius\Bundle\AdminBundle\Controller\PageController
+    serius_admin.controller.page_tree.class:  Serius\Bundle\AdminBundle\Controller\PageTreeController
+
+services:
+    # Controllers
+    serius_admin.controller.index:
+        class: %serius_admin.controller.index.class%
+
+#    serius_admin.controller.page:
+#        class: %serius_admin.controller.page.class%
+#        arguments:
+#            - @serius_page.repository.page
+#
+#    serius_admin.controller.page_tree:
+#        class: %serius_admin.controller.page_tree.class%
+#        arguments:
+#            - @serius_page.repository.page
+#            - @doctrine.orm.entity_manager

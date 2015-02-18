@@ -1,0 +1,38 @@
+<script type="text/javascript">
+    $('.sonata_list_table tbody').sortable({
+        axis: 'y',
+        opacity: 0.6,
+        items: 'tr',
+        helper: function(e, tr)
+        {
+            var $originals = tr.children();
+            var $helper = tr.clone();
+            $helper.children().each(function(index)
+            {
+                // Set helper cell sizes to match the original sizes
+                $(this).width($originals.eq(index).width() + 18);
+            });
+
+            return $helper;
+        },
+        update: function(event, ui) {
+            var data = $(this).sortable('serialize');
+
+            $.ajax({
+                url: Routing.generate('admin_serius_page_widget_sort', {
+
+                }),
+                data: data,
+                success: function() {
+//                    $.gritter.add({
+//                        // (string | mandatory) the heading of the notification
+//                        title: 'Volgorde opgeslagen',
+//                        // (string | mandatory) the text inside the notification
+//                        text: 'De volgorde van de widgets zijn aangepast.'
+//                    });
+                    noty({text: 'Volgorde opgeslagen!', type: 'success', layout: 'topRight', timeout: 2000});
+                }
+            });
+        }
+    });
+</script>

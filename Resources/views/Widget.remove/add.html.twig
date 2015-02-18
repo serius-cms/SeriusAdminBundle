@@ -1,0 +1,95 @@
+{% extends '@SeriusAdmin/layout.html.twig' %}
+
+{% block page_title %}
+    Widget toevoegen aan pagina {{ page.name }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="bread-crumb">
+        <a href="{{ path('serius_admin_page_index') }}"><i class="fa fa-edit"></i> Pagina's</a>
+        <span class="divider">/</span>
+        <a href="{{ path('serius_admin_page_edit', { 'id': page.id }) }}">{{ page.name }}</a>
+        <span class="divider">/</span>
+        <a href="#" class="bread-current">Widget toevoegen</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="widget">
+        <div class="widget-content">
+            <div class="padd">
+                {% if currentType is not defined or currentType is null %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2>Kies een widget</h2>
+                            <hr/>
+
+                            <div class="list-group spacer">
+                                {% for widgetType in widgetTypes %}
+                                    {% set active = currentType is defined and currentType == widgetType %}
+                                    <a href="{{ path('serius_admin_widget_add', { 'id': page.id, 'type': widgetType.id }) }}" class="list-group-item {{ active ? 'active' : '' }}">
+                                        <span class="{{ widgetType.icon }}"></span> {{ widgetType.name }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+
+                            <a href="{{ path('serius_admin_page_edit', { id: page.id }) }}" class="btn btn-link"><i class="fa fa-arrow-left"></i> Terug naar pagina {{ page.name }}</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <h2><span class="{{ currentType.icon }}"></span> {{ currentType.name }}</h2>
+                    <p><a href="{{ path('serius_admin_widget_add', { 'id': page.id }) }}">Andere widget kiezen</a></p>
+                    <hr/>
+
+                    <div class="form quick-post">
+                        <!-- Edit profile form (not working)-->
+                        <form class="form">
+                            <!-- Title -->
+                            <div class="form-group">
+                                <label class="control-label" for="title">Title</label>
+                                <div class="">
+                                    <input type="text" class="form-control" id="title">
+                                </div>
+                            </div>
+                            <!-- Content -->
+                            <div class="form-group">
+                                <label class="control-label" for="content">Content</label>
+                                <div class="">
+                                    <textarea class="form-control" id="content"></textarea>
+                                </div>
+                            </div>
+                            <!-- Cateogry -->
+                            <div class="form-group">
+                                <label class="control-label">Category</label>
+                                <div class="">
+                                    <select class="form-control">
+                                        <option value="">- Choose Cateogry -</option>
+                                        <option value="1">General</option>
+                                        <option value="2">News</option>
+                                        <option value="3">Media</option>
+                                        <option value="4">Funny</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Tags -->
+                            <div class="form-group">
+                                <label class="control-label" for="tags">Tags</label>
+                                <div class="">
+                                    <input type="text" class="form-control" id="tags">
+                                </div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="form-group">
+
+                                <button type="submit" class="btn btn-primary">Toevoegen</button>
+                                <a href="{{ path('serius_admin_page_edit', { id: page.id }) }}" class="btn btn-link">Annuleren</a>
+
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

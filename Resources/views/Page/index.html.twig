@@ -1,0 +1,372 @@
+{% extends '@SeriusAdmin/layout.html.twig' %}
+
+{% block page_title %}Pagina's{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('vendor/jstree/dist/themes/default/style.css') }}" type="text/css" />
+    <style type="text/css">
+        .jstree-default .jstree-wholerow-hovered {
+            background: #FAFAFA;
+        }
+
+        .jstree-default .jstree-wholerow-clicked {
+            background: #E6E6E6;
+        }
+
+        #page_tree {
+            min-height: 500px;
+        }
+
+        .buttons {
+            margin-bottom: 15px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="widget">
+                <div class="widget-head">
+                    Overzicht
+                </div>
+                <div class="widget-content">
+                    <div class="padd">
+                        <div class="buttons hide">
+                            <button id="tree-add" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-plus"></i> </button>
+                            <button id="tree-rename" class="btn btn-xs btn-default disabled"><i class="glyphicon glyphicon-pencil"></i> </button>
+                            <button id="tree-delete" class="btn btn-xs btn-default disabled"><i class="glyphicon glyphicon-remove"></i> </button>
+                        </div>
+                        <div id="page_tree"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            {% block page_edit %}
+                <!--<p>Kies een pagina om te beginnen.</p>-->
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('vendor/jstree/dist/jstree.min.js') }}"></script>
+    <script type="text/javascript">
+    var currentNode;
+    var $tree = $('#page_tree')
+            .jstree({
+                'plugins' : [ "unique", "dnd", "contextmenu", "types", "themes", "wholerow" ],
+                'core' : {
+                    'check_callback': true,
+                    'data' : {{ treeData | json_encode | raw }}
+                },
+                'types': {
+                    "default": {
+                        "icon" : "fa fa-globe"
+                    },
+                    "root": {
+                        "icon" : "root fa fa-globe"
+                    },
+                    "page" : {
+                        "icon" : "page fa fa-file-text-o"
+                    },
+                    "page_hidden" : {
+                        "icon" : "page_hidden fa fa-file-o"
+                    },
+                    "page_disabled" : {
+                        "icon" : "page_disabled fa fa-ban"
+                    },
+                    "page_redirect" : {
+                        "icon" : "page_redirect fa fa-external-link"
+                    },
+                    "trash" : {
+                        "icon" : "trash fa fa-trash-o"
+                    }
+                },
+                'contextmenu': {
+                    'items': function(node) {
+                        var items = {
+                            'add': {
+                                'label': "Nieuwe subpagina...",
+                                'action': function() {
+                                    $tree.jstree('create_node', node, { "type": "page_disabled", text: "Nieuwe pagina" }, "last", function(new_node) {
+                                        $tree.jstree("edit", new_node);
+                                    });
+                                },
+                                'separator_after': true,
+                                'icon': 'glyphicon glyphicon-plus-sign'
+                            },
+                            'show': {
+                                'label': "Weergeven in menu",
+                                'action': function() {
+                                    $tree.trigger('show_page.jstree', {
+                                        'node': node
+                                    });
+                                },
+                                'icon': 'glyphicon glyphicon-eye-open'
+                            },
+                            'hide': {
+                                'label': "Verbergen in menu",
+                                'action': function() {
+                                    $tree.trigger('hide_page.jstree', {
+                                        'node': node
+                                    });
+                                },
+                                'icon': 'glyphicon glyphicon-eye-close'
+                            },
+                            'enable': {
+                                'label': "Publiceren",
+                                'action': function() {
+                                    $tree.trigger('enable_page.jstree', {
+                                        'node': node
+                                    });
+                                },
+                                'icon': 'glyphicon glyphicon-ok'
+                            },
+                            'disable': {
+                                'label': "Uitschakelen",
+                                'action': function() {
+                                    $tree.trigger('disable_page.jstree', {
+                                        'node': node
+                                    });
+                                },
+                                'icon': 'glyphicon glyphicon-ban-circle'
+                            },
+                            'rename': {
+                                'label': "Naam wijzigen",
+                                'action': function() {
+                                    $tree.jstree('edit', node);
+                                },
+                                'separator_before': true,
+                                'icon': 'glyphicon glyphicon-italic'
+                            },
+                            'delete': {
+                                'label': "Verwijderen",
+                                'action': function() {
+                                    //if(confirm("Weet u zeker dat u de pagina " + node.text + " wilt verwijderen?")) {
+                                        $tree.jstree('delete_node', node);
+                                    //}
+                                },
+                                'icon': 'glyphicon glyphicon-trash'
+                            }
+                        };
+
+                        if(node.original.visible) {
+                            items.show = false;
+                        }
+                        else {
+                            items.hide = false;
+                        }
+
+                        if(node.original.enabled) {
+                            items.enable = false;
+                        }
+                        else {
+                            items.show._disabled = true;
+                            items.hide._disabled = true;
+                            items.disable = false;
+                        }
+
+                        if(node.type == "root") {
+                            items.rename = false;
+                            items.delete = false;
+                            items.show = false;
+                            items.hide = false;
+                            items.enable = false;
+                            items.disable = false;
+                        }
+
+                        return items;
+                    }
+                }
+            })
+            .on("create_node.jstree", function (e, data) {
+                var node = data.node;
+                var parent_id = data.parent;
+                var parent_node = $tree.jstree('get_node', parent_id);
+
+                $.ajax({
+                    url: Routing.generate('serius_admin_page_tree_add_child', {
+                        'id': parent_node.original.id
+                    }),
+                    'type': 'post',
+                    'data': {
+                        'name': node.original.text
+                    },
+                    'success': function(response) {
+                        node.original.id = response.id;
+                    }
+                });
+            })
+            .on("select_node.jstree", function(e, data) {
+                var node = data.node;
+
+                if(node.original.root) {
+                    return false;
+                }
+
+                //window.location = Routing.generate('serius_admin_page_edit', {
+                //    'id': node.id
+                //});
+
+                return true;
+            })
+            .on('selectstart', false)
+            .on("click.jstree", function(e, data) {
+                var $target = $(e.target);
+
+                if(!$target.is('a')) {
+                    return;
+                }
+
+                var $li = $target.closest("li");
+                var node = $tree.jstree('get_node', $li);
+
+                if(node.original.root) {
+                    return;
+                }
+
+                window.location = Routing.generate('serius_admin_page_edit', {
+                    'id': node.id
+                });
+            })
+            .on("rename_node.jstree", function (e, data) {
+                var node = data.node;
+
+                $.post(Routing.generate('serius_admin_page_tree_rename', {
+                    'id': node.original.id
+                }), {
+                    "name": data.text
+                });
+            })
+            .on("show_page.jstree", function(e, data) {
+                var node = data.node;
+
+                $.post(Routing.generate('serius_admin_page_tree_show', {
+                    'id': node.original.id
+                }), function() {
+                    //$tree.jstree('refresh');
+                });
+
+                node.original.visible = true;
+                $tree.jstree('set_type', node, getType(node));
+            })
+            .on("hide_page.jstree", function(e, data) {
+                var node = data.node;
+
+                //alert(node.type);
+
+                $.post(Routing.generate('serius_admin_page_tree_hide', {
+                    'id': node.original.id
+                }), function() {
+                    //$tree.jstree('refresh');
+                });
+
+                node.original.visible = false;
+                $tree.jstree('set_type', node, getType(node));
+            })
+            .on("enable_page.jstree", function(e, data) {
+                var node = data.node;
+
+                $.post(Routing.generate('serius_admin_page_tree_enable', {
+                    'id': node.original.id
+                }), function() {
+                    //$tree.jstree('refresh');
+                });
+
+                node.original.enabled = true;
+                $tree.jstree('set_type', node, getType(node));
+            })
+            .on("disable_page.jstree", function(e, data) {
+                var node = data.node;
+
+                $.post(Routing.generate('serius_admin_page_tree_disable', {
+                    'id': node.original.id
+                }), function() {
+                    //$tree.jstree('refresh');
+                });
+
+                node.original.enabled = false;
+                $tree.jstree('set_type', node, getType(node));
+            })
+            .on("move_node.jstree", function (e, data) {
+                var node = data.node;
+                var parent_id = data.parent;
+                var position = data.position;
+
+                $.post(Routing.generate('serius_admin_page_tree_move', {
+                    'id': node.original.id
+                }), {
+                    "parent_id": parent_id == '#' ? -1 : parent_id,
+                    "position": position
+                });
+            })
+            .on("delete_node.jstree", function (e, data) {
+                var node = data.node;
+
+                $.post(Routing.generate('serius_admin_page_tree_delete', {
+                    'id': node.original.id
+                }));
+            });
+
+    if($tree.jstree('get_selected').length > 0) {
+        $('#tree-rename, #tree-delete')
+                .prop('disabled', false)
+                .removeClass('disabled');
+
+
+    }
+
+    function getType(node)
+    {
+        switch (true) {
+            case node.original.root:
+                return 'root';
+            case node.original.trash:
+                return 'trash';
+            case !node.original.enabled:
+                return 'page_disabled';
+            case node.original.redirect:
+                return 'page_redirect';
+            case !node.original.visible:
+                return 'page_hidden';
+            default:
+                return 'page';
+        }
+    }
+
+
+    $('#tree-add').click(function() {
+        var node = $tree.jstree("get_selected", true)[0];
+
+        if(node == undefined) {
+            node = $tree.jstree("get_node", 'ul > li:first');
+        }
+
+        $tree.jstree('create_node', node, { "type": "page_disabled", text: "Nieuwe pagina" }, "last", function(new_node) {
+            $tree.jstree("edit", new_node);
+        });
+
+        return false;
+    });
+
+    $('#tree-rename').click(function() {
+        var node = $tree.jstree("get_selected", true)[0];
+        $tree.jstree('edit', node);
+        return false;
+    });
+
+    $('#tree-delete').click(function() {
+        var node = $tree.jstree("get_selected", true)[0];
+        if(confirm("Weet u zeker dat u de pagina " + node.text + " wilt verwijderen?")) {
+            $tree.jstree('delete_node', node);
+        }
+        return false;
+    });
+    </script>
+{% endblock %}
