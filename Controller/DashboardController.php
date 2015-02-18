@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  * A controller for the admin's dashboard
  *
  * @package Serius\Bundle\CmsBundle\Controller
- * @Route(service="serius_admin.controller.index")
+ * @Route(service="serius_admin.controller.dashboard")
  */
 class DashboardController
 {
