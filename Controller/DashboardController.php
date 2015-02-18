@@ -19,7 +19,7 @@ class DashboardController
 {
     /**
      * @Route("/")
-     * @Route("/", name="serius_admin_dashboard")
+     * @Route("/", name="serius_admin_dashboard_index")
      * @Template
      * @return array
      */
