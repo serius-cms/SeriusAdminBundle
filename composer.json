@@ -11,7 +11,6 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "serius-cms/serius-admin-bundle": "dev-master",
         "friendsofsymfony/jsrouting-bundle": "1.5.*",
         "sonata-project/admin-bundle": "2.3.*@dev",
         "stof/doctrine-extensions-bundle": "1.1.*",
