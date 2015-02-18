@@ -17,7 +17,8 @@ use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Creates the menu for the admin area
+ * Creates the menu for the admin area, based on
+ * the registered dashboard groups from Sonata Admin
  *
  * @package Serius\Bundle\AdminBundle\Menu
  */
@@ -60,51 +61,18 @@ class MenuBuilder
     public function createMainMenu(Request $request)
     {
         $menu = $this->factory->createItem('root');
-        $menu->setChildrenAttribute('id', 'nav');
+        $menu->setChildrenAttribute('id', 'nav'); // needed for bootstrap
 
+        // Add dashboard first
         $menu->addChild(
             'Dashboard',
             array(
-                'route' => 'serius_admin_index_index',
+                'route' => 'serius_admin_dashboard',
                 'labelAttributes' => array(
-                    'class' => 'fa fa-home'
+                    'class' => 'fa fa-home'     // icon for dashboard
                 ),
             )
         );
-
-
-        /*$menus = $menu->addChild(
-            "menu",
-            array(
-                'route' => 'serius_admin_menu_index',
-                'labelAttributes' => array(
-                    'class' => 'fa fa-list'
-                ),
-                'label' => 'Menu\'s',
-            )
-        );
-
-        if(strpos($request->get('_route'), 'serius_admin_menu') === 0) {
-            $menus->setCurrent(true);
-        }*/
-
-//        $pages = $menu->addChild(
-//            "foo",
-//            array(
-//                'route' => 'serius_admin_page_index',
-//                'label' => "Pagina's",
-//                'labelAttributes' => array(
-//                    'class' => 'fa fa-edit'
-//                ),
-//            )
-//        );
-//
-//        if(
-//            strpos($request->get('_route'), 'serius_admin_page') === 0 ||
-//            strpos($request->get('_route'), 'serius_admin_widget') === 0
-//        ) {
-//            $pages->setCurrent(true);
-//        }
 
         // Add Sonata Admin menu items
         foreach ($this->adminPool->getDashboardGroups() as $group) {
@@ -115,15 +83,14 @@ class MenuBuilder
             /**
              * @var $admin \Sonata\AdminBundle\Admin\Admin
              */
-
             foreach ($group['items'] as $admin) {
                 if ($admin->hasRoute('list')) {
                     $count++;
                 }
             }
 
-            // If one item, add first as menu item
             if ($count == 1) {
+                // If one item, add first as menu item
                 $admin = $group['items'][0];
                 $item = $this->addAdmin($menu, $admin, $request, $group);
 
@@ -131,6 +98,7 @@ class MenuBuilder
                     'class' => $group['icon'] ?: 'fa fa-folder',
                 ));
             } elseif ($count > 1) {
+                // If more items, add as submenu item
                 $groupItem = $menu->addChild($group['label'], array(
                     'uri' => '#',
                     'labelAttributes' => array(
@@ -147,7 +115,7 @@ class MenuBuilder
         return $menu;
     }
 
-    protected function addAdmin(ItemInterface $parentItem, AdminInterface $admin, Request $request, $groupConfig)
+    private function addAdmin(ItemInterface $parentItem, AdminInterface $admin, Request $request, $groupConfig)
     {
         $label = $admin->getLabel();
 

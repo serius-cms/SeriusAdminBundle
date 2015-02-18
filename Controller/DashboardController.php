@@ -10,11 +10,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
- * Class IndexController
+ * A controller for the admin's dashboard
+ *
  * @package Serius\Bundle\CmsBundle\Controller
  * @Route(service="serius_admin.controller.index")
  */
-class IndexController
+class DashboardController
 {
     /**
      * @Route("/")
