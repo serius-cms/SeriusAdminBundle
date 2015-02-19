@@ -1,0 +1,195 @@
+
+// Sidebar
+.sidebar {
+    width: 230px;
+    float: left;
+    position: relative;
+
+    .sidebar-dropdown {
+        display: none; // only for mobile
+
+        a {
+            color: #fff !important;
+            box-shadow: inset 0 0 1px #000;
+            background-color: #3D3D3D;
+            padding:6px;
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 11px;
+            display: block;
+            border-top: 2px solid #666;
+            border-bottom: 1px solid #333;
+        }
+    }
+
+    ul {
+        .list-unstyled();
+    }
+}
+
+#nav {
+    position: relative;
+    z-index: 60;
+
+    i {
+        margin-right: 10px;
+        margin-left: 5px;
+        font-size: 17px;
+        width: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+
+    > li > a {
+        display: block;
+        padding: 10px 10px;
+        color: #C5CED6;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+        text-decoration: none;
+        border-top: 1px solid #515A63;
+        border-bottom: 1px solid #424A52;
+    }
+
+    > li:hover > a,
+    > li > a.open,
+    > li > a.subdrop {
+        border-top: 1px solid #4F5861;
+        border-bottom: 1px solid #3C434A;
+        background-color: #3C434A;
+        color: #fff;
+
+        i {
+            color: #fff;
+        }
+    }
+
+    // submenu
+    li ul {
+        li a {
+            display: block;
+            background: #2E3338;
+            padding: 5px 10px 5px 20px;
+            text-decoration: none;
+            color: #bbb;
+            border-bottom: 1px solid #2E3338;
+            box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
+
+            &:hover, &.active {
+                background: #59646E;
+                color:#ccc;
+                border-bottom: 1px solid #59646E;
+            }
+        }
+    }
+
+    .has_sub ul i{
+        font-size: 14px;
+        width: 16px;
+        margin-left: 0;
+        margin-right: 6px;
+    }
+}
+
+// Enlarged content area (collapsed sidebar)
+.content.enlarged {
+
+    .sidebar {
+        width: 50px;
+
+        .navbar-form {
+            padding: 10px 7px;
+
+            .search-button {
+                right: 7px;
+            }
+
+            .form-control {
+                color: #999;
+
+                &::-webkit-input-placeholder {
+                    color: #999;
+                }
+
+                &:-moz-placeholder {
+                    color: #999;
+                }
+
+                &::-moz-placeholder {
+                    color: #999;
+                }
+
+                &:-ms-input-placeholder {
+                    color: #999;
+                }
+            }
+
+            &:hover {
+                width: 230px;
+                position: relative;
+                z-index: 100;
+
+                .form-control {
+                    color: #111;
+
+                    &::-webkit-input-placeholder {
+                        color: #ccc;
+                    }
+
+                    &:-moz-placeholder {
+                        color: #ccc;
+                    }
+
+                    &::-moz-placeholder {
+                        color: #ccc;
+                    }
+
+                    &:-ms-input-placeholder {
+                        color: #ccc;
+                    }
+                }
+            }
+        }
+
+        #nav {
+            // first level
+            > li {
+                position: relative;
+                white-space: nowrap;
+
+                > ul {
+                    display: none;
+                }
+
+                // hide labels
+                > a span {
+                    display: none;
+                    padding-left: 10px;
+                }
+
+                // show labels and submenu on hover
+                &:hover {
+                    > a {
+                        width: 230px;
+                        position: relative;
+
+                        .pull-right {
+                            position: absolute;
+                            right: 10px;
+                            top: 7px;
+                        }
+                    }
+                    > a span {
+                        display: inline;
+                    }
+
+                    > ul {
+                        position: absolute;
+                        left: 50px;
+                        width: 180px;
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}

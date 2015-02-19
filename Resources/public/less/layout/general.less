@@ -1,0 +1,65 @@
+
+body {
+    padding-top: 43px;
+}
+
+// menu-button
+.menu-button {
+    font-size: 21px;
+    border-right: 1px solid #333;
+    padding-right: 11px;
+    padding-left: 1px;
+    color :#ddd;
+    line-height: 43px;
+
+    &:hover, &:focus, &:active {
+        color: #fff;
+        text-decoration: none;
+    }
+}
+
+// mobile
+@media (max-width: @screen-xs-max){
+
+    .navbar-nav .open .dropdown-menu{
+        position: absolute;
+        background: #fafafa;
+    }
+
+    .leftonmobile > .dropdown-menu{
+        right: auto !important;
+    }
+
+    .navbar-nav {
+        margin: 0;
+    }
+
+    .navbar-collapse.in {
+        overflow-y:visible
+    }
+
+    .nav > li{
+        display:block;
+        float: left;
+    }
+
+    .sidebar{
+        float: none;
+        width: 100%;
+
+        .sidebar-dropdown {
+            display: block;
+        }
+
+        #nav{
+            display: none;
+        }
+
+    }
+
+    .main {
+        float: none;
+        margin: 0;
+        border: 0;
+    }
+}

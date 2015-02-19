@@ -1,0 +1,43 @@
+
+// Extra buttons
+@btn-green-color:       #fff;
+@btn-green-bg:          #6C9380;
+@btn-green-border:      @btn-green-bg;
+@btn-green-hover:       #7CA893;
+
+@btn-lime-color:       #fff;
+@btn-lime-bg:          #C0CA55;
+@btn-lime-border:      @btn-lime-bg;
+@btn-lime-hover:       #CED95B;
+
+@btn-purple-color:       #fff;
+@btn-purple-bg:          #AD5472;
+@btn-purple-border:      @btn-purple-bg;
+@btn-purple-hover:       #BD5C7C;
+
+.btn-green {
+    .button-variant(@btn-green-color; @btn-green-bg; @btn-green-border);
+
+    &:hover, &:focus {
+        background-color: @btn-green-hover;
+        border-color: @btn-green-hover;
+    }
+}
+
+.btn-lime {
+    .button-variant(@btn-lime-color; @btn-lime-bg; @btn-lime-border);
+
+    &:hover, &:focus {
+        background-color: @btn-lime-hover;
+        border-color: @btn-lime-hover;
+    }
+}
+
+.btn-purple {
+    .button-variant(@btn-purple-color; @btn-purple-bg; @btn-purple-border);
+
+    &:hover, &:focus {
+        background-color: @btn-purple-hover;
+        border-color: @btn-purple-hover;
+    }
+}

@@ -1,0 +1,55 @@
+
+// main area
+.main {
+    position: relative;
+    margin-left: 230px;
+    width: auto;
+    overflow: hidden;
+    background:#EEEFF2;
+    border-left: 1px solid #ccc;
+    z-index: 50;
+    min-height: 800px;
+    padding-bottom: 20px;
+
+    .container{
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+// Enlarged content area (collapsed sidebar)
+.content.enlarged {
+    .main {
+        margin-left: 50px;
+    }
+}
+
+/* Page head */
+.page-head {
+    background: #f3f3f3;
+    border-bottom: 1px solid #fff;
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 15px;
+
+    .breadcrumb {
+        margin-bottom: 0;
+    }
+
+    .actions {
+        margin: 15px 0;
+    }
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+    font-size: 12px;
+
+    a {
+        color: #666;
+    }
+
+    i {
+        margin-right: 3px;
+    }
+}

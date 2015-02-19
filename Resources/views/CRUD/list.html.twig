@@ -52,7 +52,6 @@
             {% block table_header %}
                 <thead>
                 <tr class="sonata-ba-list-field-header">
-                    <!--<th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch"></th>-->
                     {% for field_description in admin.list.elements %}
                         {% if admin.hasRoute('batch') and field_description.getOption('code') == '_batch' and batchactions|length > 0 %}
                             <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
@@ -89,9 +88,6 @@
                 <tbody>
                 {% for object in admin.datagrid.results %}
                     <tr id="row_{{ admin.id(object) }}">
-                        <!--<td class="sonata-ba-list-expand">
-                            <i class="fa fa-plus-square-o"></i>
-                        </td>-->
                         {% include admin.getTemplate('inner_list_row') %}
                     </tr>
                 {% endfor %}
@@ -185,53 +181,49 @@
 
 {% block list_filters %}
     {% if admin.datagrid.filters %}
-        <div class="widget {{ admin.isChild and 1 == admin.datagrid.filters|length ? 'hide' : '' }}">
-            <div class="widget-head">
+        <div class="panel panel-default {{ admin.isChild and 1 == admin.datagrid.filters|length ? 'hide' : '' }}">
+            <div class="panel-heading">
                 {{ 'label_filters'|trans({}, 'SonataAdminBundle') }}
             </div>
-            <div class="widget-content">
-                <div class="padd">
-                    <form class="sonata-filter-form" action="{{ admin.generateUrl('list') }}" method="GET">
-                        {{ form_errors(form) }}
-                        <fieldset class="">
-                            <div class="filter_container {{ admin.datagrid.hasActiveFilters ? 'active' : 'inactive' }}">
-                                {% set advanced = false %}
-                                {% for filter in admin.datagrid.filters %}
-                                    {% if not filter.value.type is empty %}
-                                        {% set advanced = true %}
-                                    {% endif %}
-                                {% endfor %}
-                                <div>
-                                    {% for filter in admin.datagrid.filters %}
-                                        <div class="clearfix">
-                                            <label for="{{ form.children[filter.formName].children['value'].vars.id }}">{{ admin.trans(filter.label, {}, filter.translationDomain) }}</label>
-                                            {{ form_widget(form.children[filter.formName].children['type'], {'attr':  form.children[filter.formName].children['type'].vars.attr|default({})|merge({'class': (form.children[filter.formName].children['type'].vars.attr.class|default('') ~ ' sonata-filter-option' ~ (advanced ? ' active' : ''))|trim})}) }}
-                                            {{ form_widget(form.children[filter.formName].children['value'], {'attr': form.children[filter.formName].children['value'].vars.attr|default({})|merge({'class': (form.children[filter.formName].children['value'].vars.attr.class|default(''))|trim})}) }}
-                                        </div>
-                                    {% endfor %}
-                                </div>
+            <div class="panel-body">
+				<form class="sonata-filter-form" action="{{ admin.generateUrl('list') }}" method="GET">
+					{{ form_errors(form) }}
+					<fieldset class="">
+						<div class="filter_container {{ admin.datagrid.hasActiveFilters ? 'active' : 'inactive' }}">
+							{% set advanced = false %}
+							{% for filter in admin.datagrid.filters %}
+								{% if not filter.value.type is empty %}
+									{% set advanced = true %}
+								{% endif %}
+							{% endfor %}
 
-                                <div class="spacer">
-                                    <label><input type="checkbox" class="filter_toggle" {{ advanced ? 'checked' : '' }}/> Geavanceerd filteren</label>
-                                </div>
+							{% for filter in admin.datagrid.filters %}
+								<div class="clearfix">
+									<label for="{{ form.children[filter.formName].children['value'].vars.id }}">{{ admin.trans(filter.label, {}, filter.translationDomain) }}</label>
+									{{ form_widget(form.children[filter.formName].children['type'], {'attr':  form.children[filter.formName].children['type'].vars.attr|default({})|merge({'class': (form.children[filter.formName].children['type'].vars.attr.class|default('') ~ ' form-control sonata-filter-option' ~ (advanced ? ' active' : ''))|trim})}) }}
+									{{ form_widget(form.children[filter.formName].children['value'], {'attr': form.children[filter.formName].children['value'].vars.attr|default({})|merge({'class': (form.children[filter.formName].children['value'].vars.attr.class|default('') ~ ' form-control')|trim})}) }}
+								</div>
+							{% endfor %}
 
-                                <input type="hidden" name="filter[_page]" id="filter__page" value="1">
-                                {% set foo = form.children['_page'].setRendered() %}
+							<label><input type="checkbox" class="filter_toggle" {{ advanced ? 'checked' : '' }}/> Geavanceerd filteren</label>
 
-                                {{ form_rest(form) }}
 
-                                <div class="spacer">
-                                    <input type="submit" class="btn btn-primary" value="{{ 'btn_filter'|trans({}, 'SonataAdminBundle') }}">
-                                    <a class="btn" href="{{ admin.generateUrl('list', {filters: 'reset'}) }}">{{ 'link_reset_filter'|trans({}, 'SonataAdminBundle') }}</a>
-                                </div>
-                            </div>
+							<input type="hidden" name="filter[_page]" id="filter__page" value="1">
+							{% set foo = form.children['_page'].setRendered() %}
 
-                            {% for paramKey, paramValue in admin.persistentParameters %}
-                                <input type="hidden" name="{{ paramKey }}" value="{{ paramValue }}">
-                            {% endfor %}
-                        </fieldset>
-                    </form>
-                </div>
+							{{ form_rest(form) }}
+
+							<div class="spacer">
+								<input type="submit" class="btn btn-primary" value="{{ 'btn_filter'|trans({}, 'SonataAdminBundle') }}">
+								<a class="btn" href="{{ admin.generateUrl('list', {filters: 'reset'}) }}">{{ 'link_reset_filter'|trans({}, 'SonataAdminBundle') }}</a>
+							</div>
+						</div>
+
+						{% for paramKey, paramValue in admin.persistentParameters %}
+							<input type="hidden" name="{{ paramKey }}" value="{{ paramValue }}">
+						{% endfor %}
+					</fieldset>
+				</form>
             </div>
         </div>
     {% endif %}

@@ -8,62 +8,28 @@
 {% set _side_menu    = block('side_menu') %}
 {% set _tab_menu     = block('tab_menu') %}
 {% set _navbar_title = block('navbar_title') %}
-{#{% set _content      = block('content') %}#}
-{% set _content      = null %}
 {% set _title        = block('title') %}
-{#{% set _breadcrumb   = block('breadcrumb') %}#}
-{% set _breadcrumb   = null %}
 {% set _actions      = block('actions') %}
-
-{% block body_classes %}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/seriusadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css') }}" media="all">
-    {% if admin_pool is defined and admin_pool.getOption('use_select2') %}
+
+	{% if admin_pool is defined and admin_pool.getOption('use_select2') %}
         <link rel="stylesheet" href="{{ asset('bundles/seriusadmin/vendor/select2/select2.css') }}" media="all">
         <link rel="stylesheet" href="{{ asset('bundles/seriusadmin/vendor/select2-bootstrap-css/select2-bootstrap.css') }}" media="all">
-        <style>
-            /*.select2-container {
-                margin-left: 0px !important;
-            }
-
-            .select2-drop ul {
-                margin: 0px !important;
-            }*/
-        </style>
     {% endif %}
-    <link rel="stylesheet" href="{{ asset('bundles/seriusadmin/css/layout.css') }}" media="all">
-    <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/css/colors.css') }}" media="all">
-    <style type="text/css">
-        .sonata-filter-option {
-            display: none;
-            margin-bottom: 5px !important;
-        }
-        .sonata-filter-option.active {
-            display: block;
-        }
-        .filter_container .clearfix {
-            margin-top: 10px;
-        }
-
-        .sonata-ba-side-menu .active > a {
-            background: #E2E2E2;
-        }
-    </style>
-
 
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
 
-    <script src="{{ asset('bundles/seriusadmin/vendor/jquery-number/jquery.number.min.js') }}"></script>
     <script>
         window.SONATA_CONFIG = {
             CONFIRM_EXIT: {% if admin_pool is defined and admin_pool.getOption('confirm_exit') %}true{% else %}false{% endif %},
             USE_SELECT2: {% if admin_pool is defined and admin_pool.getOption('use_select2') %}true{% else %}false{% endif %}
         };
+
         window.SONATA_TRANSLATIONS = {
             CONFIRM_EXIT:  '{{ 'confirm_exit'|trans({}, 'SonataAdminBundle')|escape('js') }}'
         };
@@ -78,31 +44,6 @@
         if (lastTab) {
             $('#'+lastTab).tab('show');
         }
-
-        // number
-        $('.money input').number(true, 2, ',', '.');
-
-        // toggle next field
-        $('.toggle_next').change(function() {
-            //var $next = $(this).closest('.form-group').next().find('input');
-            //$next.prop('disabled', !$(this).is(':checked'));
-            var $next = $(this).closest('.form-group').next();
-            $next.toggle($(this).is(':checked'));
-        }).trigger('change');
-
-        // Prevent submitting forms twice
-        /*$('form').submit(function(e) {
-
-            $(this).find('input[type=submit], button[type=submit]').each(function() {
-                if($(this).data('clicked')) {
-                    $(this).prop('disabled', true);
-                }
-            });
-        });
-
-        $('input[type=submit], button[type=submit]').click(function() {
-            $(this).data('clicked', true);
-        })*/
 
         $('.sonata-ba-list-expand').click(function() {
             var $tr = $(this).closest('tr');
@@ -120,7 +61,6 @@
     </script>
 
     <script src="{{ asset('bundles/seriusadmin/js/admin.js') }}"></script>
-    <script src="{{ asset('bundles/seriusadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js') }}"></script>
     {% if admin_pool is defined and admin_pool.getOption('use_select2') %}
         <script src="{{ asset('bundles/seriusadmin/vendor/select2/select2.js') }}"></script>
         <script src="{{ asset('bundles/seriusadmin/vendor/select2/select2_locale_nl.js') }}"></script>
@@ -144,25 +84,25 @@
 
 {% block breadcrumb %}
     {% block sonata_breadcrumb %}
-        {% if _breadcrumb is not empty or action is defined %}
-            <div class="bread-crumb">
-                {% if action is defined %}
-                    {% for menu in admin.breadcrumbs(action) %}
-                        {% if not loop.last  %}
-                            {% if menu.uri is not empty %}
-                                <a href="{{ menu.uri }}">{{ menu.label }}</a>
-                            {% else %}
-                                {{ menu.label }}
-                            {% endif %}
-                            <span class="divider">/</span>
-                        {% elseif action == 'create' %}
-                            <a href="#" class="bread-current">Toevoegen</a>
-                        {% else %}
-                            <a href="#" class="bread-current">{{ menu.label }}</a>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
+        {% if action is defined %}
+            <ol class="breadcrumb">
+
+				{% for menu in admin.breadcrumbs(action) %}
+					{% if not loop.last  %}
+						{% if menu.uri is not empty %}
+							<li><a href="{{ menu.uri }}">{{ menu.label }}</a></li>
+						{% else %}
+							{{ menu.label }}
+						{% endif %}
+					{% else %}
+						{% if action == 'create' %}
+							<li class="current">Toevoegen</li>
+						{% else %}
+							<li class="current">{{ menu.label }}</li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+            </ol>
         {% endif %}
     {% endblock sonata_breadcrumb %}
 {% endblock %}
@@ -210,10 +150,6 @@
                 {% block sonata_admin_content %}
                     {% if _preview is not empty %}
                         <div class="sonata-ba-preview">{{ _preview|raw }}</div>
-                    {% endif %}
-
-                    {% if _content is not empty %}
-                        <div class="sonata-ba-content">{{ _content|raw }}</div>
                     {% endif %}
 
                     {% if _show is not empty %}
