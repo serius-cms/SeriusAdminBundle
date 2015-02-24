@@ -5,7 +5,7 @@ $(function() {
     }
 
     Admin.setup_select2(document);
-    Admin.setup_xeditable(document);
+    //Admin.setup_xeditable(document);
     Admin.set_object_field_value(document);
     Admin.add_filters(document);
     Admin.setup_collection_buttons(document);
