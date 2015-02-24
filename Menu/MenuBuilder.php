@@ -99,7 +99,13 @@ class MenuBuilder
                 ));
             } elseif ($count > 1) {
                 // If more items, add as submenu item
-                $groupItem = $menu->addChild($group['label'], array(
+
+                $label = $group['label'];
+                if ($group['label_catalogue']) {
+                    $label = $this->translator->trans($label, array(), $group['label_catalogue']);
+                }
+
+                $groupItem = $menu->addChild($label, array(
                     'uri' => '#',
                     'labelAttributes' => array(
                         'class' => $group['icon'] ?: 'fa fa-folder',
