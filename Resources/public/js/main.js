@@ -86,3 +86,24 @@ $(function(){
         $('body, html').animate({ scrollTop: 0 }, 500);
     });
 });
+
+// Show last tabs
+var lastTabs;
+try {
+    lastTabs = JSON.parse(localStorage.getItem('lastTabs') || "[]");
+} catch (err) {
+    lastTabs = [];
+}
+
+if (lastTabs && Array.isArray(lastTabs)) {
+    $.each(lastTabs, function(index, value) {
+        $('[href="' + value + '"]').tab('show');
+    });
+} else {
+    lastTabs = [];
+}
+
+$('.remember-tab a').on('shown.bs.tab', function (e) {
+    lastTabs.push($(e.target).attr('href'));
+    localStorage.setItem('lastTabs', JSON.stringify(lastTabs));
+});
