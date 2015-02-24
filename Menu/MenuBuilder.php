@@ -75,7 +75,7 @@ class MenuBuilder
         );
 
         // Add Sonata Admin menu items
-        foreach ($this->adminPool->getAdminGroups() as $group) {
+        foreach ($this->adminPool->getDashboardGroups() as $group) {
 
             // Do not display the group label if no item in group is available
             $count = 0;
@@ -84,7 +84,6 @@ class MenuBuilder
              * @var $admin \Sonata\AdminBundle\Admin\Admin
              */
             foreach ($group['items'] as $admin) {
-                $admin = $this->adminPool->getInstance($admin);
                 if ($admin->hasRoute('list')) {
                     $count++;
                 }
@@ -93,7 +92,6 @@ class MenuBuilder
             if ($count == 1) {
                 // If one item, add first as menu item
                 $admin = $group['items'][0];
-                $admin = $this->adminPool->getInstance($admin);
                 $item = $this->addAdmin($menu, $admin, $request, $group);
 
                 $item->setLabelAttributes(array(
@@ -115,7 +113,6 @@ class MenuBuilder
                 ));
 
                 foreach ($group['items'] as $admin) {
-                    $admin = $this->adminPool->getInstance($admin);
                     $this->addAdmin($groupItem, $admin, $request, $group);
                 }
             }
