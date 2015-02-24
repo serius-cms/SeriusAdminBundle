@@ -1,5 +1,5 @@
-SeriusAdminBundle - A Symfony2 bundle providing a CMS backoffice
-================================================================
+SeriusAdminBundle - A Symfony bundle providing a CMS backoffice
+===============================================================
 
 SeriusAdminBundle extends SonataAdminBundle by adding a more complete admin area
 and is the start for any custom web application that needs a backoffice for CRUD operations.
