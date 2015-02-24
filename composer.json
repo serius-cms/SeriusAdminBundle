@@ -1,31 +1,31 @@
 {
-    "name": "serius-cms/serius-admin-bundle",
-    "type": "symfony-bundle",
-    "description": "A Symfony2 bundle that extends Sonata Admin, providing a CMS backoffice",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Dirk Luijk",
-            "email": "dirk@luijkwebcreations.nl"
-        }
-    ],
-    "require": {
-        "friendsofsymfony/jsrouting-bundle": "1.5.*",
-        "sonata-project/admin-bundle": "2.3.*",
-        "stof/doctrine-extensions-bundle": "1.1.*",
-        "sonata-project/doctrine-orm-admin-bundle": "2.2.x",
-        "knplabs/knp-menu-bundle": "2.0.*",
-        "egeloen/ckeditor-bundle": "~2.0"
-    },
-    "autoload": {
-      "psr-4": { "Serius\\Bundle\\AdminBundle\\": "" }
-    },
-    "scripts": {
-      "post-install-cmd": [
-        "bower install"
-      ],
-      "post-update-cmd": [
-        "bower install"
-      ]
+  "name": "serius-cms/admin-bundle",
+  "type": "symfony-bundle",
+  "description": "A Symfony2 bundle extending Sonata Admin, providing a CMS backoffice",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dirk Luijk",
+      "email": "dirk@luijkwebcreations.nl"
     }
+  ],
+  "require": {
+    "sonata-project/doctrine-orm-admin-bundle": "2.2.x",
+    "sonata-project/admin-bundle": "2.3.*",
+    "friendsofsymfony/jsrouting-bundle": "1.5.*",
+    "stof/doctrine-extensions-bundle": "1.1.*",
+    "knplabs/knp-menu-bundle": "2.0.*",
+    "egeloen/ckeditor-bundle": "~2.0"
+  },
+  "autoload": {
+    "psr-4": {"Serius\\Bundle\\AdminBundle\\": ""}
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "bower install"
+    ],
+    "post-update-cmd": [
+      "bower install"
+    ]
+  }
 }
