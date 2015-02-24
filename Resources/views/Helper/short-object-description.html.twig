@@ -2,7 +2,7 @@
     {% if admin.hasRoute('edit') and admin.isGranted('EDIT') %}
         <a href="{{ admin.generateObjectUrl('edit', object) }}" target="new">
             {% if object.providerName is defined and object.providerName == 'sonata.media.provider.image' %}
-                {#{% thumbnail object, 'small' %}#}
+                {% thumbnail object, 'serius_admin_preview' %}
             {% else %}
                 {{ description }}
             {% endif %}
