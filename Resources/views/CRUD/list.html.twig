@@ -1,11 +1,9 @@
 {% extends base_template %}
 
 {% block actions %}
-    {% if admin.datagrid.results|length > 0 or admin.isChild %}
-        <div class="sonata-actions btn-group">
-            {% include '@SeriusAdmin/Button/create_button.html.twig' %}
-        </div>
-    {% endif %}
+	<div class="sonata-actions btn-group">
+		{% include '@SeriusAdmin/Button/create_button.html.twig' %}
+	</div>
 {% endblock %}
 
 {% block side_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active', 'style': 'list'}) }}{% endblock %}
