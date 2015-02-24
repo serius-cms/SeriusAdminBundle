@@ -330,8 +330,10 @@ legend.sonata-ba-fieldset-collapsed-description + .sonata-ba-collapsed-fields {
     padding: 5px;
 }
 
-.inner-field-short-description {
-
+.field-short-description img {
+    max-width: 250px;
+    margin: 6px 0;
+    border-radius: 2px;
 }
 
 .required:after {
@@ -394,6 +396,8 @@ td.sonata-ba-list-field.sonata-ba-list-field-select a {
 
     .form-control();
     width: auto;
+    height: auto;
+    min-height: 36px;
 
     a {
         color: @input-color;
