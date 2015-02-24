@@ -108,13 +108,13 @@ var Admin = {
     },
 
     add_filters: function(subject) {
-        $('.filter_container .sonata-filter-option', subject).not('.active').hide();
+        $('.filter_container .sonata-filter-type', subject).not('.active').hide();
         $('.filter_toggle', subject).change(function() {
             if($(this).is(':checked')) {
-                $('.filter_container .sonata-filter-option').slideDown();
+                $('.filter_container .sonata-filter-type').slideDown();
             }
             else {
-                $('.filter_container .sonata-filter-option').slideUp();
+                $('.filter_container .sonata-filter-type').slideUp();
             }
 
             //return false;

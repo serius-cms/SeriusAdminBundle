@@ -12,13 +12,11 @@
 {% set _actions      = block('actions') %}
 
 {% block stylesheets %}
-    {{ parent() }}
-
 	{% if admin_pool is defined and admin_pool.getOption('use_select2') %}
-        <link rel="stylesheet" href="{{ asset('bundles/seriusadmin/vendor/select2/select2.css') }}" media="all">
-        <link rel="stylesheet" href="{{ asset('bundles/seriusadmin/vendor/select2-bootstrap-css/select2-bootstrap.css') }}" media="all">
-    {% endif %}
+		<link rel="stylesheet" href="{{ asset('bundles/seriusadmin/vendor/select2/select2.css') }}" media="all">
+	{% endif %}
 
+    {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
@@ -141,7 +139,7 @@
 
         <div class="row">
             {% if _side_menu is not empty %}
-                <div class="sidebar col-md-2">
+                <div class="col-md-2">
                     <div class="well sonata-ba-side-menu" style="padding: 8px 0;">{{ _side_menu|raw }}</div>
                 </div>
             {% endif %}

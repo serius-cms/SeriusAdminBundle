@@ -23,9 +23,6 @@
         {% include '@SonataAdmin/Button/show_button.html.twig' %}
         {% include '@SonataAdmin/Button/history_button.html.twig' %}
         {% include '@SonataAdmin/Button/acl_button.html.twig' %}
-        {% if admin.id(object) is not null %}
-            {% include '@SeriusAdmin/Button/create_button.html.twig' %}
-        {% endif %}
         {% include '@SeriusAdmin/Button/list_button.html.twig' %}
     </div>
 {% endblock %}

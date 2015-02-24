@@ -1,67 +1,79 @@
-{% use "@BraincraftedBootstrap/Form/bootstrap.html.twig" %}
-{#{% use "form_div_layout.html.twig" %}#}
+{% extends "@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig" %}
 
-{% block checkbox_row %}
-    {% if sonata_admin.admin %}
-        {% set translation_domain = sonata_admin.field_description.translationDomain %}
-    {% endif %}
-    {% set align_with_widget = true %}
-    {{ parent() }}
-{% endblock %}
+{% block url_widget -%}
+	<div class="input-group">
+		<span class="input-group-addon">http://</span>
+		{{- block('form_widget_simple') -}}
+	</div>
+{%- endblock url_widget %}
 
-{% block money_widget %}
-    {% spaceless %}
-        {% set type = type|default('text') %}
-        <div class="input-group money">
-            {{ money_pattern|replace({
-            '{{ widget }}': block('form_widget_simple'),
-            '{{ tag_start }}': '<span class="input-group-addon">',
-            '{{ tag_end }}': '</span>'
-            })|raw }}
-        </div>
-    {% endspaceless %}
-{% endblock money_widget %}
+{% block money_widget -%}
+	<div class="input-group">
+		{% set prepend = '{{' == money_pattern[0:2] %}
+		{% if not prepend %}
+			<span class="input-group-addon">{{ money_pattern|replace({ '{{ widget }}':''}) }}</span>
+		{% endif %}
+		{{- block('form_widget_simple') -}}
+		{% if prepend %}
+			<span class="input-group-addon">{{ money_pattern|replace({ '{{ widget }}':''}) }}</span>
+		{% endif %}
+	</div>
+{%- endblock money_widget %}
 
-    {# Labels #}
-{% block form_label %}
-    {% spaceless %}
-        {% if label is not sameas(false) %}
-            {% set label_attr = label_attr|merge({'class': label_attr.class|default('') ~ " control-label col-sm-2" }) %}
+{% block percent_widget -%}
+	<div class="input-group">
+		{{- block('form_widget_simple') -}}
+		<span class="input-group-addon">%</span>
+	</div>
+{%- endblock percent_widget %}
 
-            {% if not compound %}
-                {% set label_attr = label_attr|merge({'for': id}) %}
-            {% endif %}
-            {% if required %}
-                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
-            {% endif %}
+{% block datetime_widget -%}
+	{% if widget == 'single_text' %}
+		{{- block('form_widget_simple') -}}
+	{% else %}
+		{% set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) %}
+		<div {{ block('widget_container_attributes') }}>
+			{{ form_errors(form.date) }}
+			{{ form_errors(form.time) }}
+			{{ form_widget(form.date, { datetime: true } ) }}&nbsp;
+			{{ form_widget(form.time, { datetime: true } ) }}
+		</div>
+	{% endif %}
+{%- endblock datetime_widget %}
 
-            {% if label is empty %}
-                {% set label = name|humanize %}
-            {% endif %}
+{% block date_widget -%}
+	{% if widget == 'single_text' %}
+		{{- block('form_widget_simple') -}}
+	{% else %}
+		{% set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) %}
+		{% if datetime is not defined or not datetime %}
+			<div {{ block('widget_container_attributes') -}}>
+		{% endif %}
+		{{ date_pattern|replace({
+			'{{ year }}': form_widget(form.year),
+			'{{ month }}': form_widget(form.month),
+			'{{ day }}': form_widget(form.day),
+		})|raw }}
+		{% if datetime is not defined or not datetime %}
+			</div>
+		{% endif %}
+	{% endif %}
+{%- endblock date_widget %}
 
-            {% if in_list_checkbox is defined and in_list_checkbox and widget is defined %}
-                <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
-                {{ widget|raw }}
-                <span>
-                    {% if not sonata_admin.admin %}
-                        {{- label|trans({}, translation_domain) -}}
-                    {% else %}
-                        {{- label|trans({}, sonata_admin.field_description.translationDomain) -}}
-                    {% endif%}
-                </span>
-                </label>
-            {% else %}
-                <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-                {% if not sonata_admin.admin%}
-                    {{- label|trans({}, translation_domain) -}}
-                {% else %}
-                    {{ sonata_admin.admin.trans(label, {}, sonata_admin.field_description.translationDomain) }}
-                {% endif %}
-                </label>
-            {% endif %}
-        {% endif %}
-    {% endspaceless %}
-{% endblock form_label %}
+{% block time_widget -%}
+	{% if widget == 'single_text' %}
+		{{- block('form_widget_simple') -}}
+	{% else %}
+		{% set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) %}
+		{% if datetime is not defined or false == datetime %}
+			<div {{ block('widget_container_attributes') -}}>
+		{% endif %}
+		{{ form_widget(form.hour) }} : {{ form_widget(form.minute) }}{% if with_seconds %} : {{ form_widget(form.second) }}{% endif %}
+		{% if datetime is not defined or false == datetime %}
+			</div>
+		{% endif %}
+	{% endif %}
+{%- endblock time_widget %}
 
 {% block widget_container_attributes_choice_widget %}
     {% spaceless %}
@@ -70,19 +82,6 @@
         {% if "class" not in attr %}class="list-unstyled"{%endif %}
     {% endspaceless %}
 {% endblock %}
-
-{#{% block choice_widget_expanded %}#}
-    {#{% spaceless %}#}
-        {#<ul {{ block('widget_container_attributes') }}>#}
-            {#{% for child in form %}#}
-                {#<li>#}
-                    {#{{ form_widget(child, {'horizontal': false, 'horizontal_input_wrapper_class': ''}) }} &#123;&#35; {'horizontal': false, 'horizontal_input_wrapper_class': ''} needed to avoid MopaBootstrapBundle messing with the DOM &#35;&#125;#}
-                    {#{{ form_label(child) }}#}
-                {#</li>#}
-            {#{% endfor %}#}
-        {#</ul>#}
-    {#{% endspaceless %}#}
-{#{% endblock choice_widget_expanded %}#}
 
 {% block choice_widget %}
     {% spaceless %}
@@ -123,131 +122,8 @@
     {% endspaceless %}
 {% endblock choice_widget %}
 
-{% block form_row %}
-    {% if sonata_admin is not defined or not sonata_admin_enabled or not sonata_admin.field_description %}
-        <div class="form-group {% if errors|length > 0%} has-error{% endif %}">
-            {{ form_label(form, label|default(null)) }}
-            <div class="{% if label is sameas(false) %}col-sm-12 sonata-collection-row-without-label{% else %}col-sm-10{% endif %}">
-                {{ form_widget(form, {'horizontal': false, 'horizontal_input_wrapper_class': ''}) }} {# {'horizontal': false, 'horizontal_input_wrapper_class': ''} needed to avoid MopaBootstrapBundle messing with the DOM #}
-                {{ block('form_help') }}
-                {% if errors|length > 0 %}
-                    <div class="help-block sonata-ba-field-error-messages">
-                        {{ form_errors(form) }}
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    {% else %}
-        <div class="form-group{% if errors|length > 0%} has-error{%endif%}" id="sonata-ba-field-container-{{ id }}">
-            {% block label %}
-                {% if sonata_admin.field_description.options.name is defined %}
-                    {{ form_label(form, sonata_admin.field_description.options.name, { 'attr' : {'class' : 'col-sm-2 control-label'} }) }}
-                {% else %}
-                    {{ form_label(form, label|default(null), { 'attr' : {'class' : 'col-sm-2 control-label'} }) }}
-                {% endif %}
-            {% endblock %}
-
-            {% set has_label = sonata_admin.field_description.options.name is defined or label is not sameas(false) %}
-            <div class="sonata-ba-field sonata-ba-field-{{ sonata_admin.edit }}-{{ sonata_admin.inline }} {% if errors|length > 0 %}sonata-ba-field-error{% endif %} {% if not has_label %}col-sm-12 sonata-collection-row-without-label{% else %}{{ form_group.class|default('col-sm-10') }}{% endif %}">
-
-                {{ form_widget(form, {'horizontal': false, 'horizontal_input_wrapper_class': ''}) }} {# {'horizontal': false, 'horizontal_input_wrapper_class': ''} needed to avoid MopaBootstrapBundle messing with the DOM #}
-                {% set translation_domain = sonata_admin.field_description.translationDomain %}
-                {{ block('form_help') }}
-                {% if errors|length > 0 %}
-                    <div class="help-block sonata-ba-field-error-messages">
-                        {{ form_errors(form) }}
-                    </div>
-                {% endif %}
-
-                {% if sonata_admin.field_description.help %}
-                    <span class="help-block sonata-ba-field-help">{{ sonata_admin.admin.trans(sonata_admin.field_description.help, {}, sonata_admin.field_description.translationDomain)|raw }}</span>
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
-{% endblock form_row %}
-
-{% block collection_widget_row %}
-    {% spaceless %}
-        <div class="sonata-collection-row">
-            {% if allow_delete %}
-                <a href="#" class="btn sonata-collection-delete"><i class="fa fa-minus-circle"></i></a>
-            {% endif %}
-            {{ form_row(child) }}
-        </div>
-    {% endspaceless %}
-{% endblock %}
-
-{% block collection_widget %}
-    {% spaceless %}
-        {% if prototype is defined %}
-            {% set child = prototype %}
-            {% set attr = attr|merge({'data-prototype': block('collection_widget_row'), 'data-prototype-name': prototype.vars.name, 'class': attr.class|default('') }) %}
-        {% endif %}
-        <div {{ block('widget_container_attributes') }}>
-            {{ form_errors(form) }}
-            {% for child in form %}
-                {{ block('collection_widget_row') }}
-            {% endfor %}
-            {{ form_rest(form) }}
-            {% if allow_add %}
-                <div><a href="#" class="btn sonata-collection-add"><i class="fa fa-plus-circle"></i></a></div>
-            {% endif %}
-        </div>
-    {% endspaceless %}
-{% endblock collection_widget %}
-
-{% block sonata_type_immutable_array_widget %}
-    {% spaceless %}
-        <div {{ block('widget_container_attributes') }}>
-            {{ form_errors(form) }}
-
-            {% for key, child in form %}
-                {{ block('sonata_type_immutable_array_widget_row') }}
-            {% endfor %}
-
-            {{ form_rest(form) }}
-        </div>
-    {% endspaceless %}
-{% endblock sonata_type_immutable_array_widget %}
-
-{% block sonata_type_immutable_array_label %}
-    {% set label = false %}
-    {{ block('form_label') }}
-{% endblock %}
-
-{% block sonata_type_immutable_array_row %}
-    {% set label = false %}
-    {{ block('form_row') }}
-{% endblock %}
-
-{% block sonata_type_immutable_array_widget_row %}
-    {% spaceless %}
-        <div class="form-group{% if errors|length > 0%} error{%endif%}" id="sonata-ba-field-container-{{ id }}-{{ key }}">
-
-            {{ form_label(child) }}
-
-            <div class="col-sm-10 sonata-ba-field sonata-ba-field-{{ sonata_admin.edit }}-{{ sonata_admin.inline }} {% if errors|length > 0 %}sonata-ba-field-error{% endif %}">
-                {{ form_widget(child, {'horizontal': false, 'horizontal_input_wrapper_class': ''}) }} {# {'horizontal': false, 'horizontal_input_wrapper_class': ''} needed to avoid MopaBootstrapBundle messing with the DOM #}
-            </div>
-
-            {% if errors|length > 0 %}
-                <div class="help-block sonata-ba-field-error-messages">
-                    {{ form_errors(child) }}
-                </div>
-            {% endif %}
-        </div>
-    {% endspaceless %}
-{% endblock %}
-
+{# sonata_type_model #}
 {% block sonata_type_model_widget %}
-    {#
-        This is not the best way to do if
-        TODO : improve this part
-    #}
-
-    {#model {{ sonata_admin.field_description.mappingtype }}#}
-
     {% if sonata_admin.field_description is empty %}
         {{ block('choice_widget') }}
     {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_ONE') %}
@@ -264,91 +140,54 @@
     {% endif %}
 {% endblock %}
 
+{% block sonata_admin_orm_one_to_one_widget %}
+	{% include 'SeriusAdminBundle:CRUD:edit_orm_one_to_one.html.twig' %}
+{% endblock %}
+
+{% block sonata_admin_orm_many_to_one_widget %}
+	{% include 'SeriusAdminBundle:CRUD:edit_orm_many_to_one.html.twig' %}
+{% endblock %}
+
+{% block sonata_admin_orm_many_to_many_widget %}
+	{% include 'SeriusAdminBundle:CRUD:edit_orm_many_to_many.html.twig' %}
+{% endblock %}
+
+{% block sonata_admin_orm_one_to_many_widget %}
+    {% include 'SeriusAdminBundle:CRUD:edit_orm_one_to_many.html.twig' %}
+{% endblock %}
+
+{# sonata_type_model_list #}
 {% block sonata_type_model_list_widget %}
-    <div id="field_container_{{ id }}" class="field-container">
-        <span id="field_actions_{{ id }}" class="field-actions">
-            <span id="field_widget_{{ id }}" class="field-short-description">
-                {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) %}
-                    {% render url('sonata_admin_short_object_information', {
-                    'code':     sonata_admin.field_description.associationadmin.code,
-                    'objectId': sonata_admin.field_description.associationadmin.id(sonata_admin.value),
-                    'uniqid':   sonata_admin.field_description.associationadmin.uniqid,
-                    'linkParameters': sonata_admin.field_description.options.link_parameters
-                    }) %}
-                {% elseif sonata_admin.field_description.options.placeholder is defined and sonata_admin.field_description.options.placeholder %}
-                    <span class="inner-field-short-description">
-                        {{ sonata_admin.field_description.options.placeholder|trans({}, 'SonataAdminBundle') }}
-                    </span>
-                {% endif %}
-            </span>
-
-            <span class="btn-group">
-                {% if sonata_admin.field_description.associationadmin.hasroute('list') and sonata_admin.field_description.associationadmin.isGranted('LIST') and btn_list %}
-                    <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('list') }}"
-                        onclick="return start_field_dialog_form_list_{{ id }}(this);"
-                        class="btn btn-default sonata-ba-action"
-                        title="{{ btn_list|trans({}, btn_catalogue) }}"
-                            >
-                        <i class="fa fa-list"></i>
-                        {{ btn_list|trans({}, btn_catalogue) }}
-                    </a>
-                {% endif %}
-
-                {% if sonata_admin.field_description.associationadmin.hasroute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') and btn_add %}
-                    <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
-                        onclick="return start_field_dialog_form_add_{{ id }}(this);"
-                        class="btn btn-default sonata-ba-action"
-                        title="{{ btn_add|trans({}, btn_catalogue) }}"
-                            >
-                        <i class="fa fa-plus"></i>
-                        {{ btn_add|trans({}, btn_catalogue) }}
-                    </a>
-                {% endif %}
-            </span>
-
-            <span class="btn-group">
-                {% if sonata_admin.field_description.associationadmin.hasRoute('delete') and sonata_admin.field_description.associationadmin.isGranted('DELETE') and btn_delete %}
-                    <a  href=""
-                        onclick="return remove_selected_element_{{ id }}(this);"
-                        class="btn btn-danger sonata-ba-action"
-                        title="{{ btn_delete|trans({}, btn_catalogue) }}"
-                            >
-                        <i class="fa fa-trash-o"></i>
-                        {{ btn_delete|trans({}, btn_catalogue) }}
-                    </a>
-                {% endif %}
-            </span>
-        </span>
-
-        <span style="display: none" >
-            {{ form_widget(form) }}
-        </span>
-
-        <div class="modal fade sonata-ba-modal-edit-one-to-one" role="dialog" style="display: none" id="field_dialog_{{ id }}">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
-    {% include '@SeriusAdmin/CRUD/edit_orm_many_association_script.html.twig' %}
+	{{ block('sonata_type_model_widget') }}
 {% endblock %}
 
+{# sonata_type_model_autocomplete #}
+{% block sonata_type_model_autocomplete_widget %}
+	{% spaceless %}
+		{{ form_widget(form.title) }}
+
+		{% for child in form %}
+			{% if not child.rendered %}
+				{{ form_widget(child) }}
+			{% endif %}
+		{% endfor %}
+
+		{% include 'SeriusAdminBundle:CRUD:edit_orm_autocomplete_script.html.twig' %}
+	{% endspaceless %}
+{% endblock sonata_type_model_autocomplete_widget %}
+
+{# sonata_type_admin #}
 {% block sonata_type_admin_widget %}
-    {#admin {{ sonata_admin.field_description.mappingtype }}#}
-    {% if sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_ONE') %}
-        {{ block('sonata_admin_orm_one_to_one_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_ONE') %}
-        {{ block('sonata_admin_orm_many_to_one_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_MANY') %}
-        {{ block('sonata_admin_orm_many_to_many_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_MANY') %}
-        {{ block('sonata_admin_orm_one_to_many_widget') }}
-    {% else %}
-        INVALID MODE : {{ id }}
-    {% endif %}
+	{% if sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_ONE') %}
+		{{ block('sonata_admin_orm_one_to_one_widget') }}
+	{% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_ONE') %}
+		{{ block('sonata_admin_orm_many_to_one_widget') }}
+	{% else %}
+		INVALID MODE : {{ id }} - type : sonata_type_collection - mapping : {{ sonata_admin.field_description.mappingtype }}
+	{% endif %}
 {% endblock %}
 
+{# sonata_type_collection #}
 {% block sonata_type_collection_widget %}
     {% if sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_MANY') %}
         {{ block('sonata_admin_orm_one_to_many_widget') }}
@@ -357,36 +196,4 @@
     {% else %}
         INVALID MODE : {{ id }} - type : sonata_type_collection - mapping : {{ sonata_admin.field_description.mappingtype }}
     {% endif %}
-{% endblock %}
-
-{% block sonata_admin_orm_one_to_one_widget %}
-    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_to_one.html.twig' %}
-{% endblock %}
-
-{% block sonata_admin_orm_many_to_many_widget %}
-    {% include 'SeriusAdminBundle:CRUD:edit_orm_many_to_many.html.twig' %}
-{% endblock %}
-
-{% block sonata_admin_orm_many_to_one_widget %}
-    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_to_one.html.twig' %}
-{% endblock %}
-
-{% block sonata_admin_orm_one_to_many_widget %}
-    {% include 'SeriusAdminBundle:CRUD:edit_orm_one_to_many.html.twig' %}
-{% endblock %}
-
-{% block serius_image_widget %}
-    {% spaceless %}
-        {% set subject =  form.parent.vars.value %}
-        {{ attribute(subject, name) ? 'j' : 'n' }}
-        {% if subject.id and attribute(subject, name) %}
-            {#<a href="{{ asset(vich_uploader_asset(subject, name)) }}" target="_blank">#}
-                {#<img src="{{ asset(vich_uploader_asset(subject, name)) }}" width="200" />#}
-            {#</a><br/>#}
-            {{ subject }}
-            {{ name }}
-        {% endif %}
-        {% set type = type|default('file') %}
-        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
-    {% endspaceless %}
 {% endblock %}
